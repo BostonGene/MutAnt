@@ -1,27 +1,32 @@
 # MutAnt
+Mutation Annotation tool for mutation pathogenicity classification
+To work with notebooks please use jupyter.
+First install dbnsfp_annotation package, then mutant
 
-Current code contains code to convert dbNSFP database into suitable for MutAnt format
+## Installation
 
+```bash
+python setup.py install
+```
+OR
+```bash
+pip install .
+```
 ## Usage
 
-Download the latest dbNSFP release from the official [site](https://sites.google.com/site/jpopgen/dbNSFP). We recommend to use softgenetics ftp link.
+```python
+from mutant.classifier import add_mutant_annotation
 
-```bash
-wget ftp://dbnsfp:dbnsfp@dbnsfp.softgenetics.com/dbNSFP4.6a.zip
-```
-Unzip the downloaded folder with any suitable program and locate into folder. For example:
-```bash
-unzip dbNSFP4.6a.zip && cd dbNSFP4.6a
-```
+# annotate vcf, genome version hg19
+add_mutant_annotation('/uftp/projects/alterationsDB/annotation_output/LUAD/TCGA-91-7771/TCGA-91-7771.vcf', file_type='vcf', genome_version = 'hg19', development_mode=True, method='predict_proba')
 
-Copy file suitable for chosen genome version, hg38 or hg19 into folder with dbNSFP database.
-From the folder run:
-```bash
-cp ~/MutAnt/generate_aggregated_database_hg38.sh .
-```
-Edit dbNSFP version in the downloaded file, default version is set to 4.6a. For, example, open file with `nano` and change version in line 3: `version="4.6a"`
+# annotate maf, genome version hg38
+add_mutant_annotation('/uftp/mvp-data/patients/Early_Adopters/BG000001/somatic.maf', file_type='maf', genome_version = 'hg38', development_mode=True, method='predict_proba')
 
-Launch the conversion script
-```bash
-sh generate_aggregated_database_hg38.sh
+# convert maf DNP to SNP and annotate, genome version hg38
+add_mutant_annotation('/uftp/mvp-data/patients/Early_Adopters/BG001542/somatic.maf',
+file_type='maf', genome_version = 'hg38', dnp_convert_info=True, method='predict_proba')
+# After annotation you will get «DNP_Converted» column in your maf with True or False values,
+# where True means that DNP was converted to SNP while annotation,
+# False - DNP could not be converted to SNP because of for amino acid change it need in two or more changes in codon.
 ```
