@@ -1,0 +1,5 @@
+[build-system]
+requires = ["setuptools", "wheel", "cython", "cmake"]
+build-backend = "setuptools.build_meta"
+[wheel]
+universal = 1
